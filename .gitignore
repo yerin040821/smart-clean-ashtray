@@ -1,0 +1,54 @@
+# Flutter / Dart
+build/
+.dart_tool/
+.pub-cache/
+.pub/
+.metadata
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# pubspec.lock (앱이면 커밋, 패키지면 ignore)
+# pubspec.lock
+
+# Android
+android/.gradle/
+android/local.properties
+android/**/generated/
+*.keystore
+*.jks
+
+# iOS
+ios/.generated/
+Pods/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+DerivedData/
+*.moved-aside
+*.xcuserstate
+
+# ESP32 / Arduino / PlatformIO
+.pio/
+
+atmel/
+*.hex
+*.elf
+*.o
+*.bin
+
+# secrets (절대 업로드 금지)
+secrets.h
+include/secrets.h
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.iml
+*.ipr
+*.iws
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
