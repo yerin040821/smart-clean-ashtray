@@ -10,10 +10,9 @@
 
 ## 📺 Project Preview
 
-| 📱 관리자 대시보드 (Web/App) | ⚙️ 원격 시퀀스 제어 |
+| 📱 관리자 대시보드 (App) | ⚙️ 원격 시퀀스 제어 |
 | :---: | :---: |
-| ![Dashboard Preview](https://via.placeholder.com/200x400.png?text=Dashboard+View) | ![Control Preview](https://via.placeholder.com/200x400.png?text=Remote+Control) |
-*(`assets/` 폴더에 실제 이미지/GIF 업로드 후 경로 수정 권장)*
+| ![Dashboard Preview](assets/시연_온도경고_최최종.gif) | ![Control Preview](assets/시연_살수_최최종.gif) |
 
 ---
 
