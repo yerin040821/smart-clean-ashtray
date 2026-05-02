@@ -7,6 +7,7 @@
 본 프로젝트는 공공장소 흡연 구역의 고질적인 문제인 악취와 화재 위험을 해결하기 위해 기획되었습니다. 내구성이 검증된 **기성 스테인리스 스탠드 재떨이**를 본체로 활용하고, 내부에 **IoT 제어 모듈 및 수조 시스템을 탑재**하는 **리트로핏(Retrofit)** 전략을 통해 경제성과 실용성을 동시에 확보한 지능형 인프라 솔루션입니다.
 
 ---
+<br>
 
 ## 📺 Project Preview
 
@@ -15,6 +16,7 @@
 | ![Dashboard Preview](assets/시연_온도경고_최최종.gif) | ![Control Preview](assets/시연_살수_최최종.gif) |
 
 ---
+<br>
 
 ## 🚀 주요 기능 (Key Features)
 
@@ -34,6 +36,7 @@
 - **화재 전용 로직**: 온도 $60^\circ C$ 이상 감지 시 예외 처리 인터럽트 발생, 즉시 경고 알림 전송 및 자동 살수 모드 가동
 
 ---
+<br>
 
 ## 🛠 Tech Stack
 
@@ -62,6 +65,7 @@
 ![Fusion 360](https://img.shields.io/badge/Autodesk_Fusion_360-EA2130?style=for-the-badge&logo=autodesk&logoColor=white)
 
 ---
+<br>
 
 ## 🏗 시스템 아키텍처 (System Architecture)
 
@@ -82,3 +86,41 @@ graph TD
         E --> F[Flutter Web/App Dashboard]
         F -- "User Trigger" --> E
     end
+```
+
+---
+<br>
+
+## 🔗 관련 문서 (Documents)
+- [Team Notion: 프로젝트 관리 및 회의록](여기에 노션 링크)
+- [Jira Board: 업무 스케줄 및 이슈 관리](여기에 지라 링크 - 공개 가능한 경우)
+
+---
+<br>
+
+## 🛠 협업 규칙 (Collaboration Rules)
+
+### 📌 Git Commit Convention
+팀원 간의 원활한 코드 리뷰와 히스토리 파악을 위해 아래의 커밋 메시지 규칙을 준수합니다.
+메시지 형식: `[태그] 작업 내용` (예: `[FEAT] MQTT 실시간 데이터 전송 로직 구현`)
+
+| 태그 | 설명 |
+| :--- | :--- |
+| **[feat]** | 새로운 기능 추가 |
+| **[fix]** | 버그 수정 |
+| **[design]** | UI 디자인 수정 및 3D 모델링(STL) 작업 |
+| **[docs]** | 문서 수정 (README, PRD, SRS, PPT 등) |
+| **[refactor]** | 코드 리팩토링 (기능 변경 없는 코드 구조 개선) |
+| **[chore]** | 빌드 업무, 패키지 매니저 설정, .gitignore 수정 등 |
+| **[test]** | 테스트 코드 추가 및 리팩토링 |
+
+### 🌿 Branch Strategy
+- **main**: 제품 출고 및 최종 발표용 브랜치 (가장 안정적인 버전)
+- **develop**: 다음 출시 버전을 위한 개발 통합 브랜치
+- **feature/기능명**: 각 파트별 세부 기능 개발 브랜치
+
+### 🤝 Code Review & Merge
+- 모든 기능 개발은 `feature/` 브랜치에서 진행합니다.
+- 개발 완료 후 `develop` 브랜치로 **Pull Request(PR)**를 생성합니다.
+- 최소 **2명 이상의 팀원 승인(Approve)**을 득한 후 Merge하는 것을 원칙으로 합니다.
+
