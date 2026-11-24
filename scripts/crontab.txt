@@ -1,0 +1,11 @@
+# cafe24 VPS: `crontab -e` 에 아래 내용 등록
+APP=/home/ubuntu/app/docker-compose.yml
+
+# Let's Encrypt 갱신 (매일 03:00, 만료 30일 전부터 실제 갱신)
+0 3 * * * docker compose -f $APP run --rm certbot renew --webroot -w /var/www/certbot --quiet && docker compose -f $APP exec -T nginx nginx -s reload
+
+# 텔레메트리 파티션: 다음 달 생성 + 13개월 이전 DROP (매월 1일 02:00)
+0 2 1 * * docker compose -f $APP exec -T api python scripts/manage_partitions.py
+
+# login_attempts / 만료 인증코드 정리 (매일 04:00)
+0 4 * * * docker compose -f $APP exec -T api python scripts/cleanup.py

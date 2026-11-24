@@ -1,0 +1,81 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+      - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+    depends_on: [frontend, api]
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    profiles: ["tools"]   # cron에서 `run --rm certbot renew`로만 실행
+
+  frontend:
+    build: ./frontend
+    restart: always
+
+  api:
+    build: ./backend
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data/firmware:/data/firmware
+      - ./secrets:/run/secrets:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    # 1883은 도커 내부망 전용 — 호스트에 publish 하지 않음
+    ports: ["8883:8883"]
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:ro
+      - ./mosquitto/certs:/mosquitto/certs:ro
+      - ./mosquitto/data:/mosquitto/data
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    # 내부망 전용 (ports 미공개). pub/sub·쿨다운 잠금용이라 영속화 불필요, 메모리 상한 64MB
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "volatile-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    env_file: .env
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: always
+    # 절대 재시작 금지 → 마이그레이션만 (docker compose exec api alembic upgrade head)
+
+volumes:
+  mysqldata:

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "734097282369",
+    "project_id": "smart-clean-ashtray-app-64ff5",
+    "storage_bucket": "smart-clean-ashtray-app-64ff5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734097282369:android:d35aa52552385de7457dc0",
+        "android_client_info": {
+          "package_name": "com.smartcleanashtray.sca_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbztsrU0qOn039SphYzDx1-WzrW3PqrOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
