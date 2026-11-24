@@ -1,0 +1,8 @@
+# 각 기기는 자기 device_id 토픽만 접근 가능 (%u = 인증서 CN)
+pattern write ashtray/%u/telemetry
+pattern write ashtray/%u/event
+pattern write ashtray/%u/status
+pattern read  ashtray/%u/command
+
+# SCA_Y 레거시 토픽 (펌웨어 토픽 통일 전까지 허용)
+pattern write ashtray/v1/telemetry

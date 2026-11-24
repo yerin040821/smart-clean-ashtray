@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  로컬 모드: 같은 WiFi의 ESP32(http://192.168.x.x, ashtray-xxx.local)에 평문 HTTP로 접근해야 함.
+  Android 설정은 IP 대역(CIDR) 지정이 불가능해 평문을 전역 허용하되,
+  서버 API/WebSocket 은 코드(config.dart)에서 https/wss 로 고정되어 있음.
+  로컬 요청은 기기별 X-Local-Key 로 인증.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
