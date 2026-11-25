@@ -9,6 +9,9 @@
 `SCA_Y/` 는 원본 저장소 clone(`.git` 포함)이라 그 폴더에서 브랜치를 만들어 PR을 올릴 수 있습니다.
 `SCA_S/` 는 새 코드라 git 이력이 없습니다 — `halong61/smart-ashtray` 에 `firmware/` 로 올리거나 모노레포에 포함하세요.
 
+## 시뮬레이션
+보드 없이 VS Code **Wokwi** 시뮬레이터로 펌웨어를 실행할 수 있습니다 → [WOKWI.md](WOKWI.md)
+
 ## SCA_S 요약
 설계서 사양(PIR 딥슬립, 서보 덮개, 플레임 센서, 소화수/탈취/청소 펌프 3개, 10-State FSM, 5-Task)대로 구현.
 - ESP32-S3에는 GPIO22가 없어 OLED SCL은 GPIO47 (설계서의 21/22는 구형 ESP32 핀맵 기준)

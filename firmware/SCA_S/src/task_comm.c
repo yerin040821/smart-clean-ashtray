@@ -141,6 +141,14 @@ void Task_Comm(void *pv)
     for (char *c = mdns_host; *c; c++) *c = (char)tolower((unsigned char)*c);
 
     HAL_Config_Load(&s_cfg);
+#ifdef SCA_DEFAULT_WIFI_SSID
+    /* Simulation build only ([env:wokwi]): join the simulator's virtual Wi-Fi instead of the setup AP */
+    if (!s_cfg.wifi_ssid[0])
+    {
+        snprintf(s_cfg.wifi_ssid, sizeof(s_cfg.wifi_ssid), "%s", SCA_DEFAULT_WIFI_SSID);
+        printf("[TASK_COMM] SIM: using build-time Wi-Fi \"%s\"\n", s_cfg.wifi_ssid);
+    }
+#endif
     HAL_Web_Begin(SCA_DEVICE_ID, web_status, App_Command_Dispatch);
     HAL_Web_SetLocalKey(s_cfg.local_key);
 

@@ -1,0 +1,5 @@
+# Wokwi 시뮬레이터 설정 — 먼저 'pio run -e wokwi' 로 빌드
+[wokwi]
+version = 1
+firmware = '.pio/build/wokwi/firmware.bin'
+elf = '.pio/build/wokwi/firmware.elf'

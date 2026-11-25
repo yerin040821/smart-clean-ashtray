@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "author": "Smart Clean Ashtray",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-s3-devkitc-1", "id": "esp", "top": 0, "left": 0,
+      "attrs": { "flashSize": "8", "serialInterface": "USB_SERIAL_JTAG" } },
+
+    { "type": "wokwi-potentiometer", "id": "gas", "top": -140, "left": -230,
+      "attrs": { "value": "250" } },
+    { "type": "wokwi-dht22", "id": "dht", "top": -60, "left": -320,
+      "attrs": { "temperature": "25", "humidity": "45" } },
+    { "type": "wokwi-hc-sr04", "id": "us", "top": 80, "left": -330,
+      "attrs": { "distance": "30" } },
+    { "type": "wokwi-slide-switch", "id": "float", "top": 210, "left": -200,
+      "attrs": { "value": "" } },
+
+    { "type": "wokwi-led", "id": "pump", "top": -150, "left": 170,
+      "attrs": { "color": "blue", "label": "PUMP" } },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": -40, "left": 210, "attrs": { "volume": "0.1" } },
+    { "type": "wokwi-neopixel", "id": "rgb", "top": 80, "left": 220 },
+    { "type": "board-ssd1306", "id": "oled", "top": 200, "left": 130, "attrs": { "i2cAddress": "0x3c" } }
+  ],
+  "connections": [
+    [ "gas:VCC", "esp:3V3.1", "red", [] ],
+    [ "gas:GND", "esp:GND.1", "black", [] ],
+    [ "gas:SIG", "esp:5", "orange", [] ],
+
+    [ "dht:VCC", "esp:3V3.1", "red", [] ],
+    [ "dht:GND", "esp:GND.1", "black", [] ],
+    [ "dht:SDA", "esp:14", "green", [] ],
+
+    [ "us:VCC", "esp:5V", "red", [] ],
+    [ "us:GND", "esp:GND.1", "black", [] ],
+    [ "us:TRIG", "esp:6", "purple", [] ],
+    [ "us:ECHO", "esp:7", "violet", [] ],
+
+    [ "float:2", "esp:8", "yellow", [] ],
+    [ "float:1", "esp:GND.1", "black", [] ],
+
+    [ "pump:A", "esp:18", "blue", [] ],
+    [ "pump:C", "esp:GND.2", "black", [] ],
+
+    [ "buzzer:2", "esp:17", "red", [] ],
+    [ "buzzer:1", "esp:GND.2", "black", [] ],
+
+    [ "rgb:DIN", "esp:4", "green", [] ],
+    [ "rgb:VDD", "esp:5V", "red", [] ],
+    [ "rgb:VSS", "esp:GND.3", "black", [] ],
+
+    [ "oled:VCC", "esp:3V3.2", "red", [] ],
+    [ "oled:GND", "esp:GND.4", "black", [] ],
+    [ "oled:SDA", "esp:21", "cyan", [] ],
+    [ "oled:SCL", "esp:47", "magenta", [] ]
+  ],
+  "dependencies": {}
+}

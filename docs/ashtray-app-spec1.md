@@ -133,6 +133,19 @@
 | 인증서 발급 스크립트 (MQTT 자체 CA, Let's Encrypt) · cron 자동 갱신 | ✅ |
 | 비밀 파일 관리 (`secrets/`, `.env`, `*.key` 커밋 제외) | ✅ |
 
+### 3-7. 펌웨어 시뮬레이션 (Wokwi) — 2026-11-25 추가
+
+실제 보드 없이 VS Code의 **Wokwi 시뮬레이터**에서 **실제 펌웨어 바이너리**를 가상 ESP32-S3 + 부품 회로로 실행.
+
+| 항목 | 내용 |
+|---|---|
+| 회로 | `firmware/SCA_S/diagram.json`(부품 12개), `firmware/SCA_Y/diagram.json`(부품 9개) — 핀은 `hal_pins.h`와 동일, Wokwi 공식 보드 정의로 핀 이름 검증 |
+| 실행 설정 | 각 펌웨어 폴더의 `wokwi.toml` |
+| 시뮬레이션 빌드 | `platformio.ini` 의 `[env:wokwi]` — 가상 WiFi `Wokwi-GUEST` 자동 접속, SCA_S 절전 진입 1분 (실제 기기용 빌드에는 영향 없음) |
+| 대체 부품 | MQ-135 → 가변저항, 플레임 센서 → 버튼(FLAME), 펌프 → LED, 플로트 스위치 → 슬라이드 스위치 |
+| 시나리오 | 사람 감지·흡연·탈취·화재(덮개 닫힘+펄스 분사+사이렌)·재 가득·센서 고장·절전 — `firmware/WOKWI.md` |
+| 한계 | 서버(MQTT TLS) 연결 불가(시뮬레이터에 인증서 없음), 설정 AP 미확인, SCA_Y OLED는 SH1106 대신 SSD1306으로 표시, 센서 물리 특성 미재현 |
+
 ---
 
 ## 4. 검증 결과
@@ -150,13 +163,16 @@
 | SCA_S 펌웨어 | FSM 단위 테스트 (Unity, PC 실행) | **15개 통과** (화재 우선순위, 수위 추정이 분사를 막지 않음 등) |
 | SCA_Y 펌웨어 | ESP32-S3 빌드 | 성공 — RAM 17.3%, Flash 35.0% |
 | SCA_Y 펌웨어 | 원작자 기존 단위 테스트 (FSM 7 + 알고리즘 3) | **10개 통과** (수정 후 회귀 없음) |
+| SCA_S 펌웨어 | **Wokwi 시뮬레이터 실행** (VS Code) | 실행 확인 (2026-11-25, 담당자 직접 실행) |
+| SCA_Y 펌웨어 | Wokwi 시뮬레이션 빌드 | 빌드 성공 — RAM 17.3%, Flash 35.0% (시뮬레이터 실행은 미확인) |
 
 ### 4-2. 아직 검증하지 않은 것 (결과보고서 작성 시 구분 필요)
 
 | 항목 | 사유 |
 |---|---|
 | 실서버 통합 동작 (MySQL·Mosquitto·Redis 연동, 실제 로그인·명령·알림 흐름) | 개발 PC에 Docker 없음, VPS 배포 전 |
-| 실기기 동작 (센서 값, 펌프·서보·LED, 딥슬립, OTA, TLS 접속) | 실제 보드·부품 미연결 |
+| 실기기 동작 (센서 값, 펌프·서보·LED, 딥슬립, OTA, TLS 접속) | 실제 보드·부품 미연결 (동작 흐름은 Wokwi 시뮬레이션으로 대체 확인, 센서 보정·기구 동작은 실기기 필요) |
+| 시뮬레이터에서의 서버 연동 | 시뮬레이터 플래시에 TLS 인증서가 없어 MQTT 접속 생략 |
 | Android APK 빌드 · 실기기 앱 실행 | Android SDK 미설치 |
 | iOS 빌드 · APNs 푸시 | 맥 필요 |
 | 웹 실서버 연동 | 화면은 목업 데이터로만 확인 |
@@ -196,8 +212,10 @@
 
 | 저장소 | 브랜치 | 내용 |
 |---|---|---|
-| `halong61/smart-ashtray` | `feature/platform` | 통합 플랫폼 모노레포 (1차 업로드) |
-| `yerin040821/smart-clean-ashtray` | `feature/platform` → `develop` **PR** | 통합 플랫폼 모노레포 (본 보고서 포함) |
+| `halong61/smart-ashtray` | `feature/platform` → `develop` **PR #1 병합 완료**, `main` 반영 | 통합 플랫폼 모노레포 — https://github.com/halong61/smart-ashtray/pull/1 |
+| `halong61/smart-ashtray` | `feature/wokwi-simulation` → `develop` **PR #2** | Wokwi 펌웨어 시뮬레이션 + 본 보고서 갱신 |
+| `yerin040821/smart-clean-ashtray` | `feature/platform` → `develop` **PR #1** (리뷰 대기) | 통합 플랫폼 모노레포 — https://github.com/yerin040821/smart-clean-ashtray/pull/1 |
+| (공통) | `develop` | 2026-11-25 `main` 에서 생성 (PR 대상) |
 
 - 비밀 파일(Firebase 서버 키, `.env`, 인증서 키)은 커밋 대상에서 제외
 - 커밋 컨벤션: `feat` / `fix` / `docs` / `chore` 등 (설계서 15장)
@@ -211,6 +229,7 @@
 | 높음 | PR 코드 리뷰 및 팀원 2명 승인 → `develop` 병합 |
 | 높음 | cafe24 VPS 배포, 실서버 통합 테스트 (로그인 → 기기 등록 → 텔레메트리 → 명령 → 알림) |
 | 높음 | 실기기 검증: 센서 보정(초음파 거리, 서보 각도, 펌프 유량), 화재 시나리오, 딥슬립 |
+| 중간 | Wokwi 시나리오 전체 점검 (SCA_S `WOKWI.md` 10개, SCA_Y 7개) 및 SCA_Y 시뮬레이터 실행 확인 |
 | 중간 | Android APK 빌드·실기기 테스트, iOS 빌드 및 APNs 등록 (맥) |
 | 중간 | 공기질 알림 임계값 현장 튜닝 (흡연마다 알림이 과다한지 확인) |
 | 낮음 | FCM 신규 등록 방식(`register()`) 전환 검토, Firebase API 키 앱 제한 설정 |
@@ -241,6 +260,9 @@ cd backend && pip install -r requirements.txt && pytest -q
 # 펌웨어 빌드
 cd firmware/SCA_S && pio run
 cd firmware/SCA_Y && pio run
+
+# 펌웨어 시뮬레이션 (Wokwi, firmware/WOKWI.md)
+cd firmware/SCA_S && pio run -e wokwi     # VS Code: F1 → Wokwi: Select Config File → Start Simulator
 
 # 전체 배포 (VPS)
 docker compose up -d --build && docker compose exec api alembic upgrade head

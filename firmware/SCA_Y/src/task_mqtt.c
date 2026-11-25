@@ -16,7 +16,7 @@
  *                 pub  ashtray/<id>/status     retained online / LWT offline
  *                 sub  ashtray/<id>/command    → App_Command_Dispatch
  *
- * TOPICS follow docs/protocol.md (legacy ashtray/v1/* removed).
+ * TOPICS follow docs/protocol.md (legacy ashtray/v1/... topics removed).
  */
 
 #include "task_mqtt.h"
@@ -169,6 +169,14 @@ void Task_MQTT(void *pvParameters)
 
     /* 1. Config + local web server */
     HAL_Config_Load(&s_cfg);
+#ifdef SCA_DEFAULT_WIFI_SSID
+    /* Simulation build only ([env:wokwi]): join the simulator's virtual Wi-Fi instead of the setup AP */
+    if (!s_cfg.wifi_ssid[0])
+    {
+        snprintf(s_cfg.wifi_ssid, sizeof(s_cfg.wifi_ssid), "%s", SCA_DEFAULT_WIFI_SSID);
+        printf("[TASK_NET] SIM: using build-time Wi-Fi \"%s\"\n", s_cfg.wifi_ssid);
+    }
+#endif
     HAL_Web_Begin(SCA_DEVICE_ID, web_status, App_Command_Dispatch);
     HAL_Web_SetLocalKey(s_cfg.local_key);
 
